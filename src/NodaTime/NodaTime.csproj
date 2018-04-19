@@ -1,49 +1,239 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Description>Noda Time is a date and time API acting as an alternative to the built-in DateTime/DateTimeOffset etc types built into the .NET framework.</Description>
-    <AssemblyTitle>Noda Time</AssemblyTitle>
-    <VersionPrefix>2.3.0</VersionPrefix>
-    <Authors>Jon Skeet</Authors>
-    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyOriginatorKeyFile>../../NodaTime Release.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageTags>date;time;timezone;calendar;nodatime</PackageTags>
-    <PackageProjectUrl>http://nodatime.org/</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/nodatime/nodatime</RepositoryUrl>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <Deterministic>True</Deterministic>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{35BEA057-D960-4B85-BC01-D537335D7EEF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NodaTime</RootNamespace>
+    <AssemblyName>NodaTime</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\NodaTime Release.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="*.resx;TimeZones\Tzdb.nzd" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-    <None Update="..\..\packaging\_._">
-      <PackagePath>lib/native/</PackagePath>
-      <Pack>true</Pack>
-    </None>
-    <None Update="..\..\packaging\NodaTime.targets">
-      <PackagePath>build/native/</PackagePath>
-      <Pack>true</Pack>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Numerics" />
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.1.1" />
+  <ItemGroup>
+    <Compile Include="AmbiguousTimeException.cs" />
+    <Compile Include="Annotations\ImmutableAttribute.cs" />
+    <Compile Include="Annotations\JetBrainsAnnotations.cs" />
+    <Compile Include="Annotations\MutableAttribute.cs" />
+    <Compile Include="Annotations\ReadWriteForEfficiencyAttribute.cs" />
+    <Compile Include="Annotations\SpecialNullHandlingAttribute.cs" />
+    <Compile Include="Annotations\TestExemptionAttribute.cs" />
+    <Compile Include="Annotations\TrustedAttribute.cs" />
+    <Compile Include="Annotations\VisibleForTestingAttribute.cs" />
+    <Compile Include="AnnualDate.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BinaryFormattingConstants.cs" />
+    <Compile Include="CalendarOrdinal.cs" />
+    <Compile Include="CalendarSystem.cs" />
+    <Compile Include="Calendars\BadiYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\CopticYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\Era.cs" />
+    <Compile Include="Calendars\EraCalculator.cs" />
+    <Compile Include="Calendars\FixedMonthYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\GJEraCalculator.cs" />
+    <Compile Include="Calendars\GJYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\GregorianYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\HebrewMonthConverter.cs" />
+    <Compile Include="Calendars\HebrewMonthNumbering.cs" />
+    <Compile Include="Calendars\HebrewScripturalCalculator.cs" />
+    <Compile Include="Calendars\HebrewYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\IslamicEpoch.cs" />
+    <Compile Include="Calendars\IslamicLeapYearPattern.cs" />
+    <Compile Include="Calendars\IslamicYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\IWeekYearRule.cs" />
+    <Compile Include="Calendars\JulianYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\NamespaceDoc.cs" />
+    <Compile Include="Calendars\PersianYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\RegularYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\SimpleWeekYearRule.cs" />
+    <Compile Include="Calendars\SingleEraCalculator.cs" />
+    <Compile Include="Calendars\UmAlQuraYearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\WeekYearRules.cs" />
+    <Compile Include="Calendars\YearMonthDayCalculator.cs" />
+    <Compile Include="Calendars\YearStartCacheEntry.cs" />
+    <Compile Include="DateAdjusters.cs" />
+    <Compile Include="DateInterval.cs" />
+    <Compile Include="DateTimeZone.cs" />
+    <Compile Include="DateTimeZoneProviders.cs" />
+    <Compile Include="Duration.cs" />
+    <Compile Include="Extensions\ClockExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DateTimeOffsetExtensions.cs" />
+    <Compile Include="Extensions\DateTimeZoneProviderExtensions.cs" />
+    <Compile Include="Extensions\DayOfWeekExtensions.cs" />
+    <Compile Include="Extensions\IsoDayOfWeekExtensions.cs" />
+    <Compile Include="Extensions\NamespaceDoc.cs" />
+    <Compile Include="Extensions\StopwatchExtensions.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="Fields\DatePeriodFields.cs" />
+    <Compile Include="Fields\FixedLengthDatePeriodField.cs" />
+    <Compile Include="Fields\IDatePeriodField.cs" />
+    <Compile Include="Fields\MonthsPeriodField.cs" />
+    <Compile Include="Fields\NamespaceDoc.cs" />
+    <Compile Include="Fields\TimePeriodField.cs" />
+    <Compile Include="Fields\YearsPeriodField.cs" />
+    <Compile Include="Globalization\NamespaceDoc.cs" />
+    <Compile Include="Globalization\NodaFormatInfo.cs" />
+    <Compile Include="Globalization\PatternResources.cs" />
+    <Compile Include="IClock.cs" />
+    <Compile Include="IDateTimeZoneProvider.cs" />
+    <Compile Include="Instant.cs" />
+    <Compile Include="Interval.cs" />
+    <Compile Include="IsoDayOfWeek.cs" />
+    <Compile Include="LocalDate.cs" />
+    <Compile Include="LocalDateTime.cs" />
+    <Compile Include="LocalInstant.cs" />
+    <Compile Include="LocalTime.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="NodaConstants.cs" />
+    <Compile Include="Offset.cs" />
+    <Compile Include="OffsetDate.cs" />
+    <Compile Include="OffsetDateTime.cs" />
+    <Compile Include="OffsetTime.cs" />
+    <Compile Include="Period.cs" />
+    <Compile Include="PeriodBuilder.cs" />
+    <Compile Include="PeriodUnits.cs" />
+    <Compile Include="SkippedTimeException.cs" />
+    <Compile Include="SystemClock.cs" />
+    <Compile Include="Text\CompositePatternBuilder.cs" />
+    <Compile Include="Text\Delegates.cs" />
+    <Compile Include="Text\DurationPattern.cs" />
+    <Compile Include="Text\DurationPatternParser.cs" />
+    <Compile Include="Text\FixedFormatInfoPatternParser.cs" />
+    <Compile Include="Text\FormatHelper.cs" />
+    <Compile Include="Text\InstantPattern.cs" />
+    <Compile Include="Text\InstantPatternParser.cs" />
+    <Compile Include="Text\InvalidPatternException.cs" />
+    <Compile Include="Text\IPartialPattern.cs" />
+    <Compile Include="Text\IPattern.cs" />
+    <Compile Include="Text\LocalDatePattern.cs" />
+    <Compile Include="Text\LocalDatePatternParser.cs" />
+    <Compile Include="Text\LocalDateTimePattern.cs" />
+    <Compile Include="Text\LocalDateTimePatternParser.cs" />
+    <Compile Include="Text\LocalTimePattern.cs" />
+    <Compile Include="Text\LocalTimePatternParser.cs" />
+    <Compile Include="Text\NamespaceDoc.cs" />
+    <Compile Include="Text\OffsetDatePattern.cs" />
+    <Compile Include="Text\OffsetDatePatternParser.cs" />
+    <Compile Include="Text\OffsetDateTimePattern.cs" />
+    <Compile Include="Text\OffsetDateTimePatternParser.cs" />
+    <Compile Include="Text\OffsetPattern.cs" />
+    <Compile Include="Text\OffsetPatternParser.cs" />
+    <Compile Include="Text\OffsetTimePattern.cs" />
+    <Compile Include="Text\OffsetTimePatternParser.cs" />
+    <Compile Include="Text\ParseBucket.cs" />
+    <Compile Include="Text\ParseResult.cs" />
+    <Compile Include="Text\Patterns\DatePatternHelper.cs" />
+    <Compile Include="Text\Patterns\IPatternParser.cs" />
+    <Compile Include="Text\Patterns\PatternBclSupport.cs" />
+    <Compile Include="Text\Patterns\PatternCursor.cs" />
+    <Compile Include="Text\Patterns\PatternFields.cs" />
+    <Compile Include="Text\Patterns\SteppedPatternBuilder.cs" />
+    <Compile Include="Text\Patterns\TimePatternHelper.cs" />
+    <Compile Include="Text\PeriodPattern.cs" />
+    <Compile Include="Text\TextCursor.cs" />
+    <Compile Include="Text\TextErrorMessages.cs" />
+    <Compile Include="Text\UnparsableValueException.cs" />
+    <Compile Include="Text\ValueCursor.cs" />
+    <Compile Include="Text\ZonedDateTimePattern.cs" />
+    <Compile Include="Text\ZonedDateTimePatternParser.cs" />
+    <Compile Include="TimeAdjusters.cs" />
+    <Compile Include="TimeZones\BclDateTimeZone.cs" />
+    <Compile Include="TimeZones\BclDateTimeZoneSource.cs" />
+    <Compile Include="TimeZones\CachedDateTimeZone.cs" />
+    <Compile Include="TimeZones\CachingZoneIntervalMap.cs" />
+    <Compile Include="TimeZones\Cldr\MapZone.cs" />
+    <Compile Include="TimeZones\Cldr\NamespaceDoc.cs" />
+    <Compile Include="TimeZones\Cldr\WindowsZones.cs" />
+    <Compile Include="TimeZones\DateTimeZoneCache.cs" />
+    <Compile Include="TimeZones\DateTimeZoneNotFoundException.cs" />
+    <Compile Include="TimeZones\Delegates.cs" />
+    <Compile Include="TimeZones\FixedDateTimeZone.cs" />
+    <Compile Include="TimeZones\IDateTimeZoneSource.cs" />
+    <Compile Include="TimeZones\InvalidDateTimeZoneSourceException.cs" />
+    <Compile Include="TimeZones\IO\DateTimeZoneReader.cs" />
+    <Compile Include="TimeZones\IO\DateTimeZoneWriter.cs" />
+    <Compile Include="TimeZones\IO\IDateTimeZoneReader.cs" />
+    <Compile Include="TimeZones\IO\IDateTimeZoneWriter.cs" />
+    <Compile Include="TimeZones\IO\TzdbStreamData.cs" />
+    <Compile Include="TimeZones\IO\TzdbStreamField.cs" />
+    <Compile Include="TimeZones\IO\TzdbStreamFieldId.cs" />
+    <Compile Include="TimeZones\IZoneIntervalMap.cs" />
+    <Compile Include="TimeZones\NamespaceDoc.cs" />
+    <Compile Include="TimeZones\PartialZoneIntervalMap.cs" />
+    <Compile Include="TimeZones\PrecalculatedDateTimeZone.cs" />
+    <Compile Include="TimeZones\Resolvers.cs" />
+    <Compile Include="TimeZones\SingleZoneIntervalMap.cs" />
+    <Compile Include="TimeZones\StandardDaylightAlternatingMap.cs" />
+    <Compile Include="TimeZones\TimeZoneInfoInterceptor.cs" />
+    <Compile Include="TimeZones\Transition.cs" />
+    <Compile Include="TimeZones\TransitionMode.cs" />
+    <Compile Include="TimeZones\TzdbDateTimeZoneSource.cs" />
+    <Compile Include="TimeZones\TzdbZone1970Location.cs" />
+    <Compile Include="TimeZones\TzdbZoneLocation.cs" />
+    <Compile Include="TimeZones\ZoneEqualityComparer.cs" />
+    <Compile Include="TimeZones\ZoneInterval.cs" />
+    <Compile Include="TimeZones\ZoneLocalMapping.cs" />
+    <Compile Include="TimeZones\ZoneRecurrence.cs" />
+    <Compile Include="TimeZones\ZoneYearOffset.cs" />
+    <Compile Include="Utility\BclConversions.cs" />
+    <Compile Include="Utility\Cache.cs" />
+    <Compile Include="Utility\HashCodeHelper.cs" />
+    <Compile Include="Utility\InvalidNodaDataException.cs" />
+    <Compile Include="Utility\NamespaceDoc.cs" />
+    <Compile Include="Utility\NodaReadOnlyDictionary.cs" />
+    <Compile Include="Utility\Preconditions.cs" />
+    <Compile Include="Utility\ReferenceEqualityComparer.cs" />
+    <Compile Include="Utility\TickArithmetic.cs" />
+    <Compile Include="YearMonthDay.cs" />
+    <Compile Include="YearMonthDayCalendar.cs" />
+    <Compile Include="ZonedClock.cs" />
+    <Compile Include="ZonedDateTime.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="Globalization\PatternResources.resx" />
+    <EmbeddedResource Include="TimeZones\Tzdb.nzd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NodaTime Release.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
