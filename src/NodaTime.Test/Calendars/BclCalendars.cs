@@ -57,13 +57,16 @@ namespace NodaTime.Test.Calendars
         public static IEnumerable<Calendar> MappedCalendars =>
             new[] { Gregorian, Hebrew, UmAlQura, Persian, Julian, Hijri };
 
+        internal static CalendarSystem CalendarSystemForCalendar(Calendar bcl) =>
+            CalendarSystemForCalendar(bcl) ?? throw new ArgumentException($"No calendar system for {bcl.GetType()}");
+
         /// <summary>
         /// Tries to work out a roughly-matching calendar system for the given BCL calendar.
         /// This is needed where we're testing whether days of the week match - even if we can
         /// get day/month/year values to match without getting the calendar right, the calendar
         /// affects the day of week.
         /// </summary>
-        internal static CalendarSystem CalendarSystemForCalendar(Calendar bcl)
+        internal static CalendarSystem? CalendarSystemForCalendarOrNull(Calendar bcl)
         {
             // Yes, this is horrible... but the specific calendars aren't available to test
             // against in netstandard

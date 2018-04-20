@@ -18,18 +18,17 @@ namespace NodaTime.Test.TimeZones
         private readonly TimeZoneInfoInterceptor.ITimeZoneInfoShim originalShim;
         private readonly ReadOnlyCollection<TimeZoneInfo> zones;
 
-        public TimeZoneInfo Local { get; }
+        public TimeZoneInfo? Local { get; }
 
-        private TimeZoneInfoReplacer(TimeZoneInfo local, ReadOnlyCollection<TimeZoneInfo> zones)
+        private TimeZoneInfoReplacer(TimeZoneInfo? local, ReadOnlyCollection<TimeZoneInfo> zones)
         {
             originalShim = TimeZoneInfoInterceptor.Shim;
             Local = local;
             this.zones = zones;
             TimeZoneInfoInterceptor.Shim = this;
-
         }
 
-        internal static IDisposable Replace(TimeZoneInfo local, params TimeZoneInfo[] allZones) =>
+        internal static IDisposable Replace(TimeZoneInfo? local, params TimeZoneInfo[] allZones) =>
             new TimeZoneInfoReplacer(local, allZones.ToList().AsReadOnly());
 
         public TimeZoneInfo FindSystemTimeZoneById(string id)

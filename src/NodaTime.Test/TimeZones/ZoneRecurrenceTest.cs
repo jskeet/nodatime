@@ -16,13 +16,13 @@ namespace NodaTime.Test.TimeZones
         public void Constructor_nullName_exception()
         {
             var yearOffset = new ZoneYearOffset(TransitionMode.Utc, 10, 31, (int)IsoDayOfWeek.Wednesday, true, LocalTime.Midnight);
-            Assert.Throws(typeof(ArgumentNullException), () => new ZoneRecurrence(null, Offset.Zero, yearOffset, 1971, 2009), "Null name");
+            Assert.Throws(typeof(ArgumentNullException), () => new ZoneRecurrence(null!, Offset.Zero, yearOffset, 1971, 2009), "Null name");
         }
 
         [Test]
         public void Constructor_nullYearOffset_exception()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => new ZoneRecurrence("bob", Offset.Zero, null, 1971, 2009), "Null yearOffset");
+            Assert.Throws(typeof(ArgumentNullException), () => new ZoneRecurrence("bob", Offset.Zero, null!, 1971, 2009), "Null yearOffset");
         }
 
         [Test]

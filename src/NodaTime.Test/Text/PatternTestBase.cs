@@ -66,7 +66,7 @@ namespace NodaTime.Test.Text
 
         protected void AssertParseNull(IPattern<T> pattern)
         {
-            var result = pattern.Parse(null);
+            var result = pattern.Parse(null!);
             Assert.IsFalse(result.Success);
             Assert.IsInstanceOf<ArgumentNullException>(result.Exception);
         }

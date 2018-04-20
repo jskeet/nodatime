@@ -78,7 +78,7 @@ namespace NodaTime.Test.Globalization
         [Test]
         public void TestConstructor_null()
         {
-            Assert.Throws<ArgumentNullException>(() => new NodaFormatInfo(null));
+            Assert.Throws<ArgumentNullException>(() => new NodaFormatInfo(null!));
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace NodaTime.Test.Globalization
         public void TestGetFormatInfo_null()
         {
             NodaFormatInfo.ClearCache();
-            Assert.Throws<ArgumentNullException>(() => NodaFormatInfo.GetFormatInfo(null));
+            Assert.Throws<ArgumentNullException>(() => NodaFormatInfo.GetFormatInfo(null!));
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace NodaTime.Test.Globalization
         public void TestEraGetNames_Null()
         {
             var info = NodaFormatInfo.GetFormatInfo(enUs);
-            Assert.Throws<ArgumentNullException>(() => info.GetEraNames(null));
+            Assert.Throws<ArgumentNullException>(() => info.GetEraNames(null!));
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace NodaTime.Test.Globalization
         public void TestEraGetEraPrimaryName_Null()
         {
             var info = NodaFormatInfo.GetFormatInfo(enUs);
-            Assert.Throws<ArgumentNullException>(() => info.GetEraPrimaryName(null));
+            Assert.Throws<ArgumentNullException>(() => info.GetEraPrimaryName(null!));
         }
 
         [Test]

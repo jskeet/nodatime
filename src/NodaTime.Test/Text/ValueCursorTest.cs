@@ -462,7 +462,7 @@ namespace NodaTime.Test.Text
             // We can cope as far as 9223372036854775807, but the trailing 1 causes a failure.
             var value = new ValueCursor("92233720368547758071");
             value.Move(0);
-            var parseResult = value.ParseInt64<string>(out long result);
+            var parseResult = value.ParseInt64<string>(out long result)!;
             Assert.IsFalse(parseResult.Success);
             Assert.IsInstanceOf<UnparsableValueException>(parseResult.Exception);            
             Assert.AreEqual(0, value.Index); // Cursor hasn't moved

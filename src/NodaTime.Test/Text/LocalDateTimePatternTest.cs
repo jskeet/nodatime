@@ -258,7 +258,7 @@ namespace NodaTime.Test.Text
             bool alwaysInvariantPattern = "Oos".Contains(patternText);
             Calendar calendar = alwaysInvariantPattern ? CultureInfo.InvariantCulture.Calendar : culture.Calendar;
 
-            var calendarSystem = BclCalendars.CalendarSystemForCalendar(calendar);
+            var calendarSystem = BclCalendars.CalendarSystemForCalendarOrNull(calendar);
             if (calendarSystem == null)
             {
                 // We can't map this calendar system correctly yet; the test would be invalid.
@@ -273,7 +273,7 @@ namespace NodaTime.Test.Text
         }
 
         // Helper method to make it slightly easier for tests to skip "bad" cultures.
-        private LocalDateTimePattern CreatePatternOrNull(string patternText, CultureInfo culture, LocalDateTime templateValue)
+        private LocalDateTimePattern? CreatePatternOrNull(string patternText, CultureInfo culture, LocalDateTime templateValue)
         {
             try
             {
@@ -326,7 +326,7 @@ namespace NodaTime.Test.Text
             }
 
             internal override IPattern<LocalDateTime> CreatePattern() =>
-                LocalDateTimePattern.CreateWithInvariantCulture(Pattern)
+                LocalDateTimePattern.CreateWithInvariantCulture(Pattern!)
                     .WithTemplateValue(Template)
                     .WithCulture(Culture);
         }

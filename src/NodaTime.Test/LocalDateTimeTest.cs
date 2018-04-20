@@ -281,7 +281,7 @@ namespace NodaTime.Test
         {
             var instance = new LocalDateTime(2012, 3, 5, 10, 45);
             var i_instance = (IComparable)instance;
-            object arg = null;
+            object? arg = null;
             var result = i_instance.CompareTo(arg);
             Assert.That(result, Is.GreaterThan(0));
         }

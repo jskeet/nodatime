@@ -223,7 +223,7 @@ namespace NodaTime.Test
             var end = new LocalDate(2017, 11, 10);
             var value = new DateInterval(start, end);
 
-            Assert.Throws<ArgumentNullException>(() => value.Contains(null));
+            Assert.Throws<ArgumentNullException>(() => value.Contains(null!));
         }
 
         [Test]
@@ -260,7 +260,7 @@ namespace NodaTime.Test
         public void Intersection_NullInterval_Throws()
         {
             var value = new DateInterval(new LocalDate(100), new LocalDate(200));
-            Assert.Throws<ArgumentNullException>(() => value.Intersection(null));
+            Assert.Throws<ArgumentNullException>(() => value.Intersection(null!));
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace NodaTime.Test
         public void Union_NullInterval_Throws()
         {
             var value = new DateInterval(new LocalDate(100), new LocalDate(200));
-            Assert.Throws<ArgumentNullException>(() => value.Union(null));
+            Assert.Throws<ArgumentNullException>(() => value.Union(null!));
         }
 
         [Test]
@@ -324,7 +324,7 @@ namespace NodaTime.Test
         {
             DateInterval firstInterval = ParseInterval(first);
             DateInterval secondInterval = ParseInterval(second);
-            DateInterval expectedResult = ParseInterval(expected);
+            DateInterval? expectedResult = ParseIntervalOrNull(expected);
 
             Assert.Multiple(() =>
             {
@@ -333,13 +333,17 @@ namespace NodaTime.Test
             });
         }
 
-        private DateInterval ParseInterval(string textualInterval)
+        private DateInterval? ParseIntervalOrNull(string? textualInterval)
         {
             if (textualInterval == null)
             {
                 return null;
             }
+            return ParseInterval(textualInterval);
+        }
 
+        private DateInterval ParseInterval(string textualInterval)
+        {
             var parts = textualInterval.Split(new char[] { ',' });
             var start = LocalDatePattern.Iso.Parse(parts[0]).Value;
             var end = LocalDatePattern.Iso.Parse(parts[1]).Value;
