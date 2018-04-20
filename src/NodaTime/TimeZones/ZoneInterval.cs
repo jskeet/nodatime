@@ -15,7 +15,7 @@ namespace NodaTime.TimeZones
     /// </summary>
     /// <threadsafety>This type is an immutable reference type. See the thread safety section of the user guide for more information.</threadsafety>
     [Immutable]
-    public sealed class ZoneInterval : IEquatable<ZoneInterval>
+    public sealed class ZoneInterval : IEquatable<ZoneInterval?>
     {
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace NodaTime.TimeZones
         /// <param name="other">An object to compare with this object.
         /// </param>
         [DebuggerStepThrough]
-        public bool Equals(ZoneInterval other)
+        public bool Equals(ZoneInterval? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -272,8 +272,8 @@ namespace NodaTime.TimeZones
             {
                 return true;
             }
-            return Name == other.Name && RawStart == other.RawStart && RawEnd == other.RawEnd
-                && WallOffset == other.WallOffset && Savings == other.Savings;
+            return Name == other!.Name && RawStart == other!.RawStart && RawEnd == other!.RawEnd
+                && WallOffset == other!.WallOffset && Savings == other!.Savings;
         }
         #endregion
 

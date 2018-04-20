@@ -199,7 +199,7 @@ namespace NodaTime.TimeZones
         [CanBeNull] public string? GetSystemDefaultId() => MapTimeZoneInfoId(TimeZoneInfoInterceptor.Local);
 
         [VisibleForTesting]
-        internal string MapTimeZoneInfoId(TimeZoneInfo timeZone)
+        internal string? MapTimeZoneInfoId(TimeZoneInfo timeZone)
         {
             string id = timeZone.Id;
             string result;
@@ -218,15 +218,15 @@ namespace NodaTime.TimeZones
             return GuessZoneIdByTransitions(timeZone);
         }
 
-        private readonly Dictionary<string, string> guesses = new Dictionary<string, string>();
+        private readonly Dictionary<string, string?> guesses = new Dictionary<string, string?>();
 
         // Cache around GuessZoneIdByTransitionsUncached
-        private string GuessZoneIdByTransitions(TimeZoneInfo zone)
+        private string? GuessZoneIdByTransitions(TimeZoneInfo zone)
         {
             lock (guesses)
             {
                 // FIXME: Stop using StandardName! (We have Id now...)
-                string cached;
+                string? cached;
                 if (guesses.TryGetValue(zone.StandardName, out cached))
                 {
                     return cached;
@@ -234,7 +234,7 @@ namespace NodaTime.TimeZones
                 // Build the list of candidates here instead of within the method, so that
                 // tests can pass in the same list on each iteration.
                 var candidates = CanonicalIdMap.Values.Select(ForId).ToList();
-                string guess = GuessZoneIdByTransitionsUncached(zone, candidates);
+                string? guess = GuessZoneIdByTransitionsUncached(zone, candidates);
                 guesses[zone.StandardName] = guess;
                 return guess;
             }
@@ -254,7 +254,7 @@ namespace NodaTime.TimeZones
         /// <param name="zone">Zone to resolve in a best-effort fashion.</param>
         /// <param name="candidates">All the Noda Time zones to consider - normally a list 
         /// obtained from this source.</param>
-        internal string GuessZoneIdByTransitionsUncached(TimeZoneInfo zone, List<DateTimeZone> candidates)
+        internal string? GuessZoneIdByTransitionsUncached(TimeZoneInfo zone, List<DateTimeZone> candidates)
         {
             // See https://github.com/nodatime/nodatime/issues/686 for performance observations.
             // Very rare use of the system clock! Windows time zone updates sometimes sacrifice past
@@ -271,7 +271,7 @@ namespace NodaTime.TimeZones
             // - so if we get to that number (or whatever our "best" so far is)
             // we know we can stop for any particular zone.
             int lowestFailureScore = (instants.Count * 30) / 100;
-            DateTimeZone bestZone = null;
+            DateTimeZone? bestZone = null;
             foreach (var candidate in candidates)
             {
                 int failureScore = 0;

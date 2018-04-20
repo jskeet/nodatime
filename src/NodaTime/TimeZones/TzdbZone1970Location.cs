@@ -149,7 +149,7 @@ namespace NodaTime.TimeZones
         /// mapped from the "iso3166.tab" file.
         /// </summary>
         [Immutable]
-        public sealed class Country : IEquatable<Country>
+        public sealed class Country : IEquatable<Country?>
         {
             /// <summary>
             /// Gets the English name of the country.
@@ -181,7 +181,7 @@ namespace NodaTime.TimeZones
             /// </summary>
             /// <param name="other">The country to compare with this one.</param>
             /// <returns><c>true</c> if the given country has the same name and code as this one; <c>false</c> otherwise.</returns>
-            public bool Equals(Country other) => other != null && other.Code == Code && other.Name == Name;
+            public bool Equals(Country? other) => other != null && other.Code == Code && other.Name == Name;
 
             /// <summary>
             /// Compares countries for equality, by name and code.

@@ -19,12 +19,12 @@ namespace NodaTime.TimeZones
     internal sealed class PrecalculatedDateTimeZone : DateTimeZone
     {
         private readonly ZoneInterval[] periods;
-        private readonly IZoneIntervalMapWithMinMax tailZone;
+        private readonly IZoneIntervalMapWithMinMax? tailZone;
         /// <summary>
         /// The first instant covered by the tail zone, or Instant.AfterMaxValue if there's no tail zone.
         /// </summary>
         private readonly Instant tailZoneStart;
-        private readonly ZoneInterval firstTailZoneInterval;
+        private readonly ZoneInterval? firstTailZoneInterval;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrecalculatedDateTimeZone"/> class.

@@ -47,7 +47,7 @@ namespace NodaTime
     [Serializable]
 #endif
     [Immutable]
-    public sealed class Period : IEquatable<Period>
+    public sealed class Period : IEquatable<Period?>
 #if !NETSTANDARD1_3
         , ISerializable
 #endif
@@ -878,7 +878,7 @@ namespace NodaTime
         /// </remarks>
         /// <param name="other">The period to compare this one with.</param>
         /// <returns>True if this period has the same values for the same properties as the one specified.</returns>
-        public bool Equals(Period other) =>
+        public bool Equals(Period? other) =>
             other != null &&
             Years == other.Years &&
             Months == other.Months &&

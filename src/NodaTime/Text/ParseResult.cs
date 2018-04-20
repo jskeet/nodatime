@@ -20,7 +20,7 @@ namespace NodaTime.Text
     public sealed class ParseResult<T>
     {
         private readonly T value;
-        private readonly Func<Exception> exceptionProvider;
+        private readonly Func<Exception>? exceptionProvider;
         internal bool ContinueAfterErrorWithMultipleFormats { get; }
 
         private ParseResult(Func<Exception> exceptionProvider, bool continueWithMultiple)
@@ -118,7 +118,7 @@ namespace NodaTime.Text
             Preconditions.CheckNotNull(projection, nameof(projection));
             return Success
                 ? ParseResult<TTarget>.ForValue(projection(Value))
-                : new ParseResult<TTarget>(exceptionProvider, ContinueAfterErrorWithMultipleFormats);
+                : new ParseResult<TTarget>(exceptionProvider!, ContinueAfterErrorWithMultipleFormats);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace NodaTime.Text
             {
                 throw new InvalidOperationException("ConvertError should not be called on a successful parse result");
             }
-            return new ParseResult<TTarget>(exceptionProvider, ContinueAfterErrorWithMultipleFormats);
+            return new ParseResult<TTarget>(exceptionProvider!, ContinueAfterErrorWithMultipleFormats);
         }
 
         #region Factory methods and readonly static fields

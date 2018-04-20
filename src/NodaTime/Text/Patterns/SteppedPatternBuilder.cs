@@ -18,7 +18,7 @@ namespace NodaTime.Text.Patterns
     /// </summary>
     internal sealed class SteppedPatternBuilder<TResult, TBucket> where TBucket : ParseBucket<TResult>
     {
-        internal delegate ParseResult<TResult> ParseAction(ValueCursor cursor, TBucket bucket);
+        internal delegate ParseResult<TResult>? ParseAction(ValueCursor cursor, TBucket bucket);
 
         private readonly List<Action<TResult, StringBuilder>> formatActions;
         private readonly List<ParseAction> parseActions;
@@ -128,13 +128,14 @@ namespace NodaTime.Text.Patterns
                 throw new InvalidPatternException(TextErrorMessages.TimeFieldAndEmbeddedTime);
             }
 
-            Action<TResult, StringBuilder> formatDelegate = null;
+            Action<TResult, StringBuilder>? formatDelegate = null;
             foreach (Action<TResult, StringBuilder> formatAction in formatActions)
             {
-                IPostPatternParseFormatAction postAction = formatAction.Target as IPostPatternParseFormatAction;
+                IPostPatternParseFormatAction? postAction = formatAction.Target as IPostPatternParseFormatAction;
                 formatDelegate += postAction == null ? formatAction : postAction.BuildFormatAction(usedFields);
             }
-            return new SteppedPattern(formatDelegate, formatOnly ? null : parseActions.ToArray(), bucketProvider, usedFields, sample);
+            // 
+            return new SteppedPattern(formatDelegate!, formatOnly ? null : parseActions.ToArray(), bucketProvider, usedFields, sample);
         }
 
         /// <summary>
@@ -303,7 +304,7 @@ namespace NodaTime.Text.Patterns
         /// The parsing is performed case-insensitively. All candidates are tested, and only the longest
         /// match is used.
         /// </summary>
-        internal void AddParseLongestTextAction(char field, Action<TBucket, int> setter, CompareInfo compareInfo, IList<string> textValues)
+        internal void AddParseLongestTextAction(char field, Action<TBucket, int> setter, CompareInfo compareInfo, IList<string?> textValues)
         {
             AddParseAction((str, bucket) => {
                 int bestIndex = -1;
@@ -324,7 +325,7 @@ namespace NodaTime.Text.Patterns
         /// The parsing is performed case-insensitively. All candidates are tested, and only the longest
         /// match is used.
         /// </summary>
-        internal void AddParseLongestTextAction(char field, Action<TBucket, int> setter, CompareInfo compareInfo, IList<string> textValues1, IList<string> textValues2)
+        internal void AddParseLongestTextAction(char field, Action<TBucket, int> setter, CompareInfo compareInfo, IList<string?> textValues1, IList<string?> textValues2)
         {
             AddParseAction((str, bucket) =>
             {
@@ -346,11 +347,11 @@ namespace NodaTime.Text.Patterns
         /// Find the longest match from a given set of candidate strings, updating the index/length of the best value
         /// accordingly.
         /// </summary>
-        private static void FindLongestMatch(CompareInfo compareInfo, ValueCursor cursor, IList<string> values, ref int bestIndex, ref int longestMatch)
+        private static void FindLongestMatch(CompareInfo compareInfo, ValueCursor cursor, IList<string?> values, ref int bestIndex, ref int longestMatch)
         {
             for (int i = 0; i < values.Count; i++)
             {
-                string candidate = values[i];
+                string? candidate = values[i];
                 if (candidate == null || candidate.Length <= longestMatch)
                 {
                     continue;
@@ -658,7 +659,7 @@ namespace NodaTime.Text.Patterns
 
                 foreach (var action in parseActions)
                 {
-                    ParseResult<TResult> failure = action(cursor, bucket);
+                    ParseResult<TResult>? failure = action(cursor, bucket);
                     if (failure != null)
                     {
                         return failure;

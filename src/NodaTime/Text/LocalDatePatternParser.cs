@@ -61,11 +61,8 @@ namespace NodaTime.Text
             if (patternText.Length == 1)
             {
                 char patternCharacter = patternText[0];
-                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo);
-                if (patternText == null)
-                {
+                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo) ??
                     throw new InvalidPatternException(TextErrorMessages.UnknownStandardFormat, patternCharacter, typeof(LocalDate));
-                }
             }
 
             var patternBuilder = new SteppedPatternBuilder<LocalDate, LocalDateParseBucket>(formatInfo,
@@ -75,7 +72,7 @@ namespace NodaTime.Text
             return patternBuilder.Build(templateValue);
         }
 
-        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
+        private string? ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
         {
             switch (patternCharacter)
             {
@@ -99,7 +96,7 @@ namespace NodaTime.Text
 
             internal CalendarSystem Calendar;
             internal int Year;
-            private Era Era;
+            private Era? Era;
             internal int YearOfEra;
             internal int MonthOfYearNumeric;
             internal int MonthOfYearText;
@@ -113,7 +110,7 @@ namespace NodaTime.Text
                 this.Calendar = templateValue.Calendar;
             }
 
-            internal ParseResult<TResult> ParseEra<TResult>(NodaFormatInfo formatInfo, ValueCursor cursor)
+            internal ParseResult<TResult>? ParseEra<TResult>(NodaFormatInfo formatInfo, ValueCursor cursor)
             {
                 var compareInfo = formatInfo.CompareInfo;
                 foreach (var era in Calendar.Eras)
@@ -137,7 +134,7 @@ namespace NodaTime.Text
                     return ParseResult<LocalDate>.ForValue(new LocalDate(Year, MonthOfYearNumeric, DayOfMonth, Calendar));
                 }
                 // This will set Year if necessary
-                ParseResult<LocalDate> failure = DetermineYear(usedFields, text);
+                ParseResult<LocalDate>? failure = DetermineYear(usedFields, text);
                 if (failure != null)
                 {
                     return failure;
@@ -189,7 +186,7 @@ namespace NodaTime.Text
             /// 
             /// Phew.
             /// </summary>
-            private ParseResult<LocalDate> DetermineYear(PatternFields usedFields, string text)
+            private ParseResult<LocalDate>? DetermineYear(PatternFields usedFields, string text)
             {
                 if (usedFields.HasAny(PatternFields.Year))
                 {
@@ -242,16 +239,18 @@ namespace NodaTime.Text
                     YearOfEra += century * 100;
                 }
 
-                if (YearOfEra < Calendar.GetMinYearOfEra(Era) ||
-                    YearOfEra > Calendar.GetMaxYearOfEra(Era))
+                // It's unpleasant to have all these Era! uses everywhere, but the alternative is to have a local
+                // variable based on the field, which ends up being a little ugly too.
+                if (YearOfEra < Calendar.GetMinYearOfEra(Era!) ||
+                    YearOfEra > Calendar.GetMaxYearOfEra(Era!))
                 {
-                    return ParseResult<LocalDate>.YearOfEraOutOfRange(text, YearOfEra, Era, Calendar);
+                    return ParseResult<LocalDate>.YearOfEraOutOfRange(text, YearOfEra, Era!, Calendar);
                 }
-                Year = Calendar.GetAbsoluteYear(YearOfEra, Era);
+                Year = Calendar.GetAbsoluteYear(YearOfEra, Era!);
                 return null;
             }
 
-            private ParseResult<LocalDate> DetermineMonth(PatternFields usedFields, string text)
+            private ParseResult<LocalDate>? DetermineMonth(PatternFields usedFields, string text)
             {
                 switch (usedFields & (PatternFields.MonthOfYearNumeric | PatternFields.MonthOfYearText))
                 {

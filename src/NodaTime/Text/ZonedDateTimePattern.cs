@@ -101,7 +101,7 @@ namespace NodaTime.Text
         [CanBeNull] public IDateTimeZoneProvider? ZoneProvider { get; }
 
         private ZonedDateTimePattern(string patternText, NodaFormatInfo formatInfo, ZonedDateTime templateValue,
-            ZoneLocalMappingResolver resolver, IDateTimeZoneProvider zoneProvider, IPattern<ZonedDateTime> pattern)
+            ZoneLocalMappingResolver? resolver, IDateTimeZoneProvider? zoneProvider, IPattern<ZonedDateTime> pattern)
         {
             this.PatternText = patternText;
             this.FormatInfo = formatInfo;
@@ -149,7 +149,7 @@ namespace NodaTime.Text
         /// <returns>A pattern for parsing and formatting zoned date/times.</returns>
         /// <exception cref="InvalidPatternException">The pattern text was invalid.</exception>
         private static ZonedDateTimePattern Create([NotNull] string patternText, [NotNull] NodaFormatInfo formatInfo,
-            [NotNull] ZoneLocalMappingResolver resolver, IDateTimeZoneProvider zoneProvider, ZonedDateTime templateValue)
+            [CanBeNull] ZoneLocalMappingResolver? resolver, [CanBeNull] IDateTimeZoneProvider? zoneProvider, ZonedDateTime templateValue)
         {
             Preconditions.CheckNotNull(patternText, nameof(patternText));
             Preconditions.CheckNotNull(formatInfo, nameof(formatInfo));

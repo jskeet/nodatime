@@ -26,7 +26,7 @@ namespace NodaTime.TimeZones
     /// Immutable, thread safe.
     /// </para>
     /// </remarks>
-    internal sealed class ZoneRecurrence : IEquatable<ZoneRecurrence>
+    internal sealed class ZoneRecurrence : IEquatable<ZoneRecurrence?>
     {
         private readonly LocalInstant maxLocalInstant;
         private readonly LocalInstant minLocalInstant;
@@ -87,7 +87,7 @@ namespace NodaTime.TimeZones
         /// true if the current object is equal to the <paramref name="other"/> parameter;
         /// otherwise, false.
         /// </returns>
-        public bool Equals(ZoneRecurrence other)
+        public bool Equals(ZoneRecurrence? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -97,7 +97,7 @@ namespace NodaTime.TimeZones
             {
                 return true;
             }
-            return Savings == other.Savings && FromYear == other.FromYear && ToYear == other.ToYear && Name == other.Name && YearOffset.Equals(other.YearOffset);
+            return Savings == other!.Savings && FromYear == other!.FromYear && ToYear == other!.ToYear && Name == other!.Name && YearOffset.Equals(other!.YearOffset);
         }
         #endregion
 

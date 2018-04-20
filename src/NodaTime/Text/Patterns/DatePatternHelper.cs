@@ -78,8 +78,8 @@ namespace NodaTime.Text.Patterns
                     case 4:
                         field = PatternFields.MonthOfYearText;
                         var format = builder.FormatInfo;
-                        IList<string> nonGenitiveTextValues = count == 3 ? format.ShortMonthNames : format.LongMonthNames;
-                        IList<string> genitiveTextValues = count == 3 ? format.ShortMonthGenitiveNames : format.LongMonthGenitiveNames;
+                        IList<string?> nonGenitiveTextValues = count == 3 ? format.ShortMonthNames : format.LongMonthNames;
+                        IList<string?> genitiveTextValues = count == 3 ? format.ShortMonthGenitiveNames : format.LongMonthGenitiveNames;
                         if (nonGenitiveTextValues == genitiveTextValues)
                         {
                             builder.AddParseLongestTextAction(pattern.Current, textSetter, format.CompareInfo, nonGenitiveTextValues);
@@ -129,7 +129,7 @@ namespace NodaTime.Text.Patterns
             public Action<TResult, StringBuilder> BuildFormatAction(PatternFields finalFields)
             {
                 bool genitive = (finalFields & PatternFields.DayOfMonth) != 0;
-                IList<string> textValues = count == 3
+                IList<string?> textValues = count == 3
                     ? (genitive ? formatInfo.ShortMonthGenitiveNames : formatInfo.ShortMonthNames)
                     : (genitive ? formatInfo.LongMonthGenitiveNames : formatInfo.LongMonthNames);
                 return (value, sb) => sb.Append(textValues[getter(value)]);
@@ -161,7 +161,7 @@ namespace NodaTime.Text.Patterns
                     case 4:
                         field = PatternFields.DayOfWeek;
                         var format = builder.FormatInfo;
-                        IList<string> textValues = count == 3 ? format.ShortDayNames : format.LongDayNames;
+                        IList<string?> textValues = count == 3 ? format.ShortDayNames : format.LongDayNames;
                         builder.AddParseLongestTextAction(pattern.Current, dayOfWeekSetter, format.CompareInfo, textValues);
                         builder.AddFormatAction((value, sb) => sb.Append(textValues[dayOfWeekGetter(value)]));
                         break;

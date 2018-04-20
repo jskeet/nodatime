@@ -18,7 +18,7 @@ namespace NodaTime.TimeZones.Cldr
     /// </summary>
     /// <threadsafety>This type is immutable reference type. See the thread safety section of the user guide for more information.</threadsafety>
     [Immutable]
-    public sealed class MapZone : IEquatable<MapZone>
+    public sealed class MapZone : IEquatable<MapZone?>
     {
         /// <summary>
         /// Identifier used for the primary territory of each Windows time zone. A zone mapping with
@@ -126,7 +126,7 @@ namespace NodaTime.TimeZones.Cldr
         }
 
         /// <inheritdoc />
-        public bool Equals(MapZone other) =>
+        public bool Equals(MapZone? other) =>
             other != null &&
             WindowsId == other.WindowsId &&
             Territory == other.Territory &&

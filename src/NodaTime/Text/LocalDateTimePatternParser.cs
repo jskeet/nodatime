@@ -88,11 +88,8 @@ namespace NodaTime.Text
                 {
                     return LocalDateTimePattern.Patterns.GeneralIsoPatternImpl;
                 }
-                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo);
-                if (patternText == null)
-                {
+                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo) ??
                     throw new InvalidPatternException(TextErrorMessages.UnknownStandardFormat, patternCharacter, typeof(LocalDateTime));
-                }
             }
 
             var patternBuilder = new SteppedPatternBuilder<LocalDateTime, LocalDateTimeParseBucket>(formatInfo,
@@ -102,7 +99,7 @@ namespace NodaTime.Text
             return patternBuilder.Build(templateValueDate.At(templateValueTime));
         }
 
-        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
+        private string? ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
         {
             switch (patternCharacter)
             {

@@ -28,7 +28,7 @@ namespace NodaTime.TimeZones
     {
         private readonly object accessLock = new object();
         private readonly IDateTimeZoneSource source;
-        private readonly IDictionary<string, DateTimeZone> timeZoneMap = new Dictionary<string, DateTimeZone>();
+        private readonly IDictionary<string, DateTimeZone?> timeZoneMap = new Dictionary<string, DateTimeZone>();
 
         /// <summary>
         /// Gets the version ID of this provider. This is simply the <see cref="IDateTimeZoneSource.VersionId"/> returned by
@@ -81,11 +81,8 @@ namespace NodaTime.TimeZones
         [NotNull]
         public DateTimeZone GetSystemDefault()
         {
-            string id = source.GetSystemDefaultId();
-            if (id == null)
-            {
+            string id = source.GetSystemDefaultId() ??
                 throw new DateTimeZoneNotFoundException($"System default time zone is unknown to source {VersionId}");
-            }
             return this[id];
         }
 
@@ -96,11 +93,11 @@ namespace NodaTime.TimeZones
             return GetZoneFromSourceOrNull(id) ?? FixedDateTimeZone.GetFixedZoneOrNull(id);
         }
 
-        private DateTimeZone GetZoneFromSourceOrNull(string id)
+        private DateTimeZone? GetZoneFromSourceOrNull(string id)
         {
             lock (accessLock)
             {
-                DateTimeZone zone;
+                DateTimeZone? zone;
                 if (!timeZoneMap.TryGetValue(id, out zone))
                 {
                     return null;

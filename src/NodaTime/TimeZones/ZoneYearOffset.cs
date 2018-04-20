@@ -37,7 +37,7 @@ namespace NodaTime.TimeZones
     /// Immutable, thread safe
     /// </para>
     /// </remarks>
-    internal sealed class ZoneYearOffset : IEquatable<ZoneYearOffset>
+    internal sealed class ZoneYearOffset : IEquatable<ZoneYearOffset?>
     {
         /// <summary>
         /// An offset that specifies the beginning of the year.
@@ -155,7 +155,7 @@ namespace NodaTime.TimeZones
         /// <returns>
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(ZoneYearOffset other)
+        public bool Equals(ZoneYearOffset? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -165,13 +165,13 @@ namespace NodaTime.TimeZones
             {
                 return true;
             }
-            return Mode == other.Mode &&
-                   monthOfYear == other.monthOfYear &&
-                   dayOfMonth == other.dayOfMonth &&
-                   dayOfWeek == other.dayOfWeek &&
-                   AdvanceDayOfWeek == other.AdvanceDayOfWeek &&
-                   TimeOfDay == other.TimeOfDay &&
-                   addDay == other.addDay;
+            return Mode == other!.Mode &&
+                   monthOfYear == other!.monthOfYear &&
+                   dayOfMonth == other!.dayOfMonth &&
+                   dayOfWeek == other!.dayOfWeek &&
+                   AdvanceDayOfWeek == other!.AdvanceDayOfWeek &&
+                   TimeOfDay == other!.TimeOfDay &&
+                   addDay == other!.addDay;
         }
 
         #endregion

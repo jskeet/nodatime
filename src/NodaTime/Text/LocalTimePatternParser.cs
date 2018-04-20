@@ -56,11 +56,8 @@ namespace NodaTime.Text
             if (patternText.Length == 1)
             {
                 char patternCharacter = patternText[0];
-                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo);
-                if (patternText == null)
-                {
+                patternText = ExpandStandardFormatPattern(patternCharacter, formatInfo) ??
                     throw new InvalidPatternException(TextErrorMessages.UnknownStandardFormat, patternCharacter, typeof(LocalTime));
-                }
             }
 
             var patternBuilder = new SteppedPatternBuilder<LocalTime, LocalTimeParseBucket>(formatInfo,
@@ -70,7 +67,7 @@ namespace NodaTime.Text
             return patternBuilder.Build(templateValue);
         }
 
-        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
+        private string? ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
         {
             switch (patternCharacter)
             {
@@ -144,7 +141,7 @@ namespace NodaTime.Text
                     AmPm = TemplateValue.Hour / 12;
                 }
                 int hour;
-                ParseResult<LocalTime> failure = DetermineHour(usedFields, text, out hour);
+                ParseResult<LocalTime>? failure = DetermineHour(usedFields, text, out hour);
                 if (failure != null)
                 {
                     return failure;
@@ -155,7 +152,7 @@ namespace NodaTime.Text
                 return ParseResult<LocalTime>.ForValue(LocalTime.FromHourMinuteSecondNanosecond(hour, minutes, seconds, fraction));
             }
 
-            private ParseResult<LocalTime> DetermineHour(PatternFields usedFields, string text, out int hour)
+            private ParseResult<LocalTime>? DetermineHour(PatternFields usedFields, string text, out int hour)
             {
                 hour = 0;
                 if (usedFields.HasAny(PatternFields.Hours24))

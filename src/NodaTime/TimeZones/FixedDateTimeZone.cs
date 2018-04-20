@@ -18,7 +18,7 @@ namespace NodaTime.TimeZones
     /// no daylight savings.
     /// </summary>
     /// <threadsafety>This type is immutable reference type. See the thread safety section of the user guide for more information.</threadsafety>
-    internal sealed class FixedDateTimeZone : DateTimeZone, IEquatable<FixedDateTimeZone>
+    internal sealed class FixedDateTimeZone : DateTimeZone, IEquatable<FixedDateTimeZone?>
     {
         private readonly ZoneInterval interval;
 
@@ -73,7 +73,7 @@ namespace NodaTime.TimeZones
         /// </summary>
         /// <param name="id">ID </param>
         /// <returns>The parsed time zone, or null if the ID doesn't match.</returns>
-        internal static DateTimeZone GetFixedZoneOrNull(string id)
+        internal static DateTimeZone? GetFixedZoneOrNull(string id)
         {
             if (!id.StartsWith(UtcId))
             {
@@ -157,7 +157,7 @@ namespace NodaTime.TimeZones
         /// <returns>True if the specified value is a <see cref="FixedDateTimeZone"/> with the same name, ID and offset; otherwise, false.</returns>
         public override bool Equals(object obj) => Equals(obj as FixedDateTimeZone);
 
-        public bool Equals(FixedDateTimeZone other) =>
+        public bool Equals(FixedDateTimeZone? other) =>
             other != null &&
             Offset == other.Offset &&
             Id == other.Id &&

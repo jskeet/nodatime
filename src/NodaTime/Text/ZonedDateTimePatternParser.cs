@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using NodaTime.Globalization;
 using NodaTime.Text.Patterns;
 using NodaTime.TimeZones;
@@ -13,8 +14,8 @@ namespace NodaTime.Text
     internal sealed class ZonedDateTimePatternParser : IPatternParser<ZonedDateTime>
     {
         private readonly ZonedDateTime templateValue;
-        private readonly IDateTimeZoneProvider zoneProvider;
-        private readonly ZoneLocalMappingResolver resolver;
+        private readonly IDateTimeZoneProvider? zoneProvider;
+        private readonly ZoneLocalMappingResolver? resolver;
 
         private static readonly Dictionary<char, CharacterHandler<ZonedDateTime, ZonedDateTimeParseBucket>> PatternCharacterHandlers =
             new Dictionary<char, CharacterHandler<ZonedDateTime, ZonedDateTimeParseBucket>>
@@ -54,7 +55,7 @@ namespace NodaTime.Text
             { 'l', (cursor, builder) => builder.AddEmbeddedLocalPartial(cursor, bucket => bucket.Date, bucket => bucket.Time, value => value.Date, value => value.TimeOfDay, value => value.LocalDateTime) },
         };
 
-        internal ZonedDateTimePatternParser(ZonedDateTime templateValue, ZoneLocalMappingResolver resolver, IDateTimeZoneProvider zoneProvider)
+        internal ZonedDateTimePatternParser(ZonedDateTime templateValue, [CanBeNull] ZoneLocalMappingResolver? resolver, [CanBeNull] IDateTimeZoneProvider? zoneProvider)
         {
             this.templateValue = templateValue;
             this.resolver = resolver;
@@ -125,7 +126,7 @@ namespace NodaTime.Text
             builder.AddEmbeddedPattern(offsetPattern, (bucket, offset) => bucket.Offset = offset, zdt => zdt.Offset);
         }
         
-        private static ParseResult<ZonedDateTime> ParseZone(ValueCursor value, ZonedDateTimeParseBucket bucket) => bucket.ParseZone(value);
+        private static ParseResult<ZonedDateTime>? ParseZone(ValueCursor value, ZonedDateTimeParseBucket bucket) => bucket.ParseZone(value);
 
         private sealed class ZonedDateTimeParseBucket : ParseBucket<ZonedDateTime>
         {
@@ -133,10 +134,10 @@ namespace NodaTime.Text
             internal readonly LocalTimePatternParser.LocalTimeParseBucket Time;
             private DateTimeZone Zone;
             internal Offset Offset;
-            private readonly ZoneLocalMappingResolver resolver;
-            private readonly IDateTimeZoneProvider zoneProvider;
+            private readonly ZoneLocalMappingResolver? resolver;
+            private readonly IDateTimeZoneProvider? zoneProvider;
 
-            internal ZonedDateTimeParseBucket(ZonedDateTime templateValue, ZoneLocalMappingResolver resolver, IDateTimeZoneProvider zoneProvider)
+            internal ZonedDateTimeParseBucket(ZonedDateTime templateValue, ZoneLocalMappingResolver? resolver, IDateTimeZoneProvider? zoneProvider)
             {
                 Date = new LocalDatePatternParser.LocalDateParseBucket(templateValue.Date);
                 Time = new LocalTimePatternParser.LocalTimeParseBucket(templateValue.TimeOfDay);
@@ -145,7 +146,7 @@ namespace NodaTime.Text
                 this.zoneProvider = zoneProvider;
             }
 
-            internal ParseResult<ZonedDateTime> ParseZone(ValueCursor value)
+            internal ParseResult<ZonedDateTime>? ParseZone(ValueCursor value)
             {
                 DateTimeZone zone = TryParseFixedZone(value) ?? TryParseProviderZone(value);
 
@@ -164,7 +165,7 @@ namespace NodaTime.Text
             /// zone. Otherwise, it will return null and the cursor will remain where
             /// it was.
             /// </summary>
-            private DateTimeZone TryParseFixedZone(ValueCursor value)
+            private DateTimeZone? TryParseFixedZone(ValueCursor value)
             {
                 if (value.CompareOrdinal(DateTimeZone.UtcId) != 0)
                 {
@@ -181,11 +182,13 @@ namespace NodaTime.Text
             /// on success (after moving the cursor to the end of the ID) or null on failure
             /// (leaving the cursor where it was).
             /// </summary>
-            private DateTimeZone TryParseProviderZone(ValueCursor value)
+            private DateTimeZone? TryParseProviderZone(ValueCursor value)
             {
                 // The IDs from the provider are guaranteed to be in order (using ordinal comparisons).
                 // Use a binary search to find a match, then make sure it's the longest possible match.
-                var ids = zoneProvider.Ids;
+
+                // zoneProvider will definitely not be null, as otherwise this would be a format-only pattern.
+                var ids = zoneProvider!.Ids;
                 int lowerBound = 0;         // Inclusive
                 int upperBound = ids.Count; // Exclusive
                 while (lowerBound < upperBound)
@@ -237,7 +240,7 @@ namespace NodaTime.Text
                             }
                         }
                         value.Move(value.Index + longestSoFar.Length);
-                        return zoneProvider[longestSoFar];
+                        return zoneProvider![longestSoFar];
                     }
                 }
                 return null;
@@ -258,7 +261,8 @@ namespace NodaTime.Text
                 {
                     try
                     {
-                        return ParseResult<ZonedDateTime>.ForValue(Zone.ResolveLocal(localDateTime, resolver));
+                        // If we're parsing, the resolver must be non-null already.
+                        return ParseResult<ZonedDateTime>.ForValue(Zone.ResolveLocal(localDateTime, resolver!));
                     }
                     catch (SkippedTimeException)
                     {

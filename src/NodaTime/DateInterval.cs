@@ -76,7 +76,7 @@ namespace NodaTime
         /// <param name="lhs">The first value to compare</param>
         /// <param name="rhs">The second value to compare</param>
         /// <returns>True if the two date intervals have the same properties; false otherwise.</returns>
-        public static bool operator ==(DateInterval lhs, DateInterval rhs)
+        public static bool operator ==(DateInterval? lhs, DateInterval? rhs)
         {
             if (ReferenceEquals(lhs, rhs))
             {
@@ -86,7 +86,8 @@ namespace NodaTime
             {
                 return false;
             }
-            return lhs.Start == rhs.Start && lhs.End == rhs.End;
+            // The compiler doesn't know enough about ReferenceEquals to handle this.
+            return lhs!.Start == rhs!.Start && lhs!.End == rhs!.End;
         }
 
         /// <summary>
