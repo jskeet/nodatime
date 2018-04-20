@@ -98,7 +98,7 @@ namespace NodaTime.TimeZones
         /// has been validated).
         /// </remarks>
         /// <value>A read-only list of zone locations known to this source.</value>
-        [CanBeNull] public IList<TzdbZoneLocation> ZoneLocations { get; }
+        [CanBeNull] public IList<TzdbZoneLocation>? ZoneLocations { get; }
 
         /// <summary>
         /// Gets a read-only list of "zone 1970" locations known to this source, or null if the original source data
@@ -124,7 +124,7 @@ namespace NodaTime.TimeZones
         /// </p>
         /// </remarks>
         /// <value>A read-only list of zone locations known to this source.</value>
-        [CanBeNull] public IList<TzdbZone1970Location> Zone1970Locations { get; }
+        [CanBeNull] public IList<TzdbZone1970Location>? Zone1970Locations { get; }
 
         /// <inheritdoc />
         /// <remarks>
@@ -196,7 +196,7 @@ namespace NodaTime.TimeZones
         [NotNull] public IEnumerable<string> GetIds() => CanonicalIdMap.Keys;
 
         /// <inheritdoc />
-        [CanBeNull] public string GetSystemDefaultId() => MapTimeZoneInfoId(TimeZoneInfoInterceptor.Local);
+        [CanBeNull] public string? GetSystemDefaultId() => MapTimeZoneInfoId(TimeZoneInfoInterceptor.Local);
 
         [VisibleForTesting]
         internal string MapTimeZoneInfoId(TimeZoneInfo timeZone)

@@ -205,7 +205,7 @@ namespace NodaTime
         /// <exception cref="ArgumentException"><paramref name="interval" /> uses a different
         /// calendar to this date interval.</exception>
         [CanBeNull]
-        public DateInterval Intersection([NotNull]DateInterval interval)
+        public DateInterval? Intersection([NotNull]DateInterval interval)
         {
             return Contains(interval) ? interval
                 : interval.Contains(this) ? this
@@ -224,7 +224,7 @@ namespace NodaTime
         /// </returns>
         /// <exception cref="ArgumentException"><paramref name="interval" /> uses a different calendar to this date interval.</exception>
         [CanBeNull]
-        public DateInterval Union([NotNull] DateInterval interval)
+        public DateInterval? Union([NotNull] DateInterval interval)
         {
             ValidateInterval(interval);
 
