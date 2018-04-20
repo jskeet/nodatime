@@ -71,7 +71,7 @@ namespace NodaTime.TimeZones
             standardRecurrence = standard;
         }
 
-        public override bool Equals(object other) => Equals(other as StandardDaylightAlternatingMap);
+        public override bool Equals(object? other) => Equals(other as StandardDaylightAlternatingMap);
 
         public bool Equals(StandardDaylightAlternatingMap? other) =>
             other != null &&

@@ -24,7 +24,7 @@ namespace NodaTime
     /// </remarks>
     /// <threadsafety>This type is immutable reference type. See the thread safety section of the user guide for more information.</threadsafety>
     [Immutable]
-    public sealed class DateInterval : IEquatable<DateInterval>
+    public sealed class DateInterval : IEquatable<DateInterval?>
     {
         /// <summary>
         /// Gets the start date of the interval.
@@ -109,14 +109,14 @@ namespace NodaTime
         /// </remarks>
         /// <param name="other">The date interval to compare this one with.</param>
         /// <returns>True if this date interval has the same same start and end date as the one specified.</returns>
-        public bool Equals(DateInterval other) => this == other;
+        public bool Equals(DateInterval? other) => this == other;
 
         /// <summary>
         /// Compares the given object for equality with this one, as per <see cref="Equals(DateInterval)"/>.
         /// </summary>
         /// <param name="obj">The value to compare this one with.</param>
         /// <returns>true if the other object is a date interval equal to this one, consistent with <see cref="Equals(DateInterval)"/>.</returns>
-        public override bool Equals(object obj) => this == (obj as DateInterval);
+        public override bool Equals(object? obj) => this == (obj as DateInterval);
 
         /// <summary>
         /// Checks whether the given date is within this date interval. This requires

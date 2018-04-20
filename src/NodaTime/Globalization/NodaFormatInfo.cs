@@ -427,7 +427,7 @@ namespace NodaTime.Globalization
         /// <param name="provider">The <see cref="IFormatProvider" />.</param>
         /// <exception cref="ArgumentException">The format provider cannot be used for Noda Time.</exception>
         /// <returns>The <see cref="NodaFormatInfo" />. Will never be null.</returns>
-        public static NodaFormatInfo GetInstance(IFormatProvider provider)
+        public static NodaFormatInfo GetInstance(IFormatProvider? provider)
         {
             switch (provider)
             {
@@ -440,7 +440,8 @@ namespace NodaTime.Globalization
                 case DateTimeFormatInfo dateTimeFormatInfo:
                     return new NodaFormatInfo(CultureInfo.InvariantCulture, dateTimeFormatInfo);
                 default:
-                    throw new ArgumentException($"Cannot use provider of type {provider.GetType().FullName} in Noda Time", nameof(provider));
+                    // Note: the ! shouldn't be necessary here given the null case.
+                    throw new ArgumentException($"Cannot use provider of type {provider!.GetType().FullName} in Noda Time", nameof(provider));
             }
         }
 

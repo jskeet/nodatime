@@ -22,7 +22,7 @@ namespace NodaTime.TimeZones
     /// <see cref="WithOptions"/> method.
     /// </remarks>
     [Immutable]
-    public sealed class ZoneEqualityComparer : IEqualityComparer<DateTimeZone>
+    public sealed class ZoneEqualityComparer : IEqualityComparer<DateTimeZone?>
     {
         /// <summary>
         /// Options to use when comparing time zones for equality. Each option makes the comparison more restrictive.
@@ -180,7 +180,7 @@ namespace NodaTime.TimeZones
         /// <param name="x">The first <see cref="DateTimeZone"/> to compare.</param>
         /// <param name="y">The second <see cref="DateTimeZone"/> to compare.</param>
         /// <returns><c>true</c> if the specified time zones are equal under the options and interval of this comparer; otherwise, <c>false</c>.</returns>
-        public bool Equals(DateTimeZone x, DateTimeZone y)
+        public bool Equals(DateTimeZone? x, DateTimeZone? y)
         {
             if (ReferenceEquals(x, y))
             {
@@ -192,7 +192,7 @@ namespace NodaTime.TimeZones
             }
             // If we ever need to port this to a platform which doesn't support LINQ,
             // we'll need to reimplement this. Until then, it would seem pointless...
-            return GetIntervals(x).SequenceEqual(GetIntervals(y), zoneIntervalComparer);
+            return GetIntervals(x!).SequenceEqual(GetIntervals(y!), zoneIntervalComparer);
         }
 
         /// <summary>
@@ -206,13 +206,14 @@ namespace NodaTime.TimeZones
         /// </remarks>
         /// <param name="obj">The time zone to compute a hash code for.</param>
         /// <returns>A hash code for the specified object.</returns>
-        public int GetHashCode([NotNull] DateTimeZone obj)
+        public int GetHashCode([NotNull] DateTimeZone? obj)
         {
+            // Yes, it's weird that this is both nullable and not-null. IEqualityComparer<T> is odd.
             Preconditions.CheckNotNull(obj, nameof(obj));
             unchecked
             {
                 int hash = 19;
-                foreach (var zoneInterval in GetIntervals(obj))
+                foreach (var zoneInterval in GetIntervals(obj!))
                 {
                     hash = hash * 31 + zoneIntervalComparer.GetHashCode(zoneInterval);
                 }

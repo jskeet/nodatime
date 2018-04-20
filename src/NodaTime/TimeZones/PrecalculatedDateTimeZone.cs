@@ -34,7 +34,7 @@ namespace NodaTime.TimeZones
         /// <param name="tailZone">The tail zone - which can be any IZoneIntervalMap for normal operation,
         /// but must be a StandardDaylightAlternatingMap if the result is to be serialized.</param>
         [VisibleForTesting]
-        internal PrecalculatedDateTimeZone([NotNull] string id, [NotNull] ZoneInterval[] intervals, IZoneIntervalMapWithMinMax tailZone)
+        internal PrecalculatedDateTimeZone([NotNull] string id, [NotNull] ZoneInterval[] intervals, IZoneIntervalMapWithMinMax? tailZone)
             : base(id, false,
                    ComputeOffset(intervals, tailZone, Offset.Min),
                    ComputeOffset(intervals, tailZone, Offset.Max))
@@ -56,7 +56,7 @@ namespace NodaTime.TimeZones
         /// </summary>
         /// <remarks>This is only called from the constructors, but is internal to make it easier to test.</remarks>
         /// <exception cref="ArgumentException">The periods specified are invalid.</exception>
-        internal static void ValidatePeriods(ZoneInterval[] periods, IZoneIntervalMap tailZone)
+        internal static void ValidatePeriods(ZoneInterval[] periods, IZoneIntervalMap? tailZone)
         {
             Preconditions.CheckArgument(periods.Length > 0, nameof(periods), "No periods specified in precalculated time zone");
             Preconditions.CheckArgument(!periods[0].HasStart, nameof(periods), "Periods in precalculated time zone must start with the beginning of time");
@@ -180,7 +180,7 @@ namespace NodaTime.TimeZones
         // Reasonably simple way of computing the maximum/minimum offset
         // from either periods or transitions, with or without a tail zone.
         private static Offset ComputeOffset([NotNull] ZoneInterval[] intervals,
-            IZoneIntervalMapWithMinMax tailZone,
+            IZoneIntervalMapWithMinMax? tailZone,
             OffsetAggregator aggregator)
         {
             Preconditions.CheckNotNull(intervals, nameof(intervals));

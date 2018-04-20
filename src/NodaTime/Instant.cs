@@ -204,7 +204,7 @@ namespace NodaTime
         /// <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance;
         /// otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj) => obj is Instant && Equals((Instant)obj);
+        public override bool Equals(object? obj) => obj is Instant && Equals((Instant)obj);
 
         /// <summary>
         ///   Returns a hash code for this instance.
@@ -491,7 +491,7 @@ namespace NodaTime
         /// or null to use the current thread's culture to obtain a format provider.
         /// </param>
         /// <filterpriority>2</filterpriority>
-        public string ToString(string patternText, IFormatProvider formatProvider) =>
+        public string ToString(string patternText, IFormatProvider? formatProvider) =>
             InstantPattern.BclSupport.Format(this, patternText, formatProvider);
         #endregion Formatting
 

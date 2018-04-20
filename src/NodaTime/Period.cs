@@ -849,7 +849,7 @@ namespace NodaTime
         /// </summary>
         /// <param name="other">The value to compare this one with.</param>
         /// <returns>true if the other object is a period equal to this one, consistent with <see cref="Equals(Period)"/></returns>
-        public override bool Equals(object other) => Equals(other as Period);
+        public override bool Equals(object? other) => Equals(other as Period);
 
         /// <summary>
         /// Returns the hash code for this period, consistent with <see cref="Equals(Period)"/>.

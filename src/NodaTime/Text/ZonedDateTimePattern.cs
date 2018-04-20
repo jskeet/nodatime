@@ -204,7 +204,7 @@ namespace NodaTime.Text
         /// <param name="patternText">Pattern text to create the pattern for</param>
         /// <param name="zoneProvider">Time zone provider, used when parsing text which contains a time zone identifier.</param>
         /// <returns>A pattern for parsing and formatting zoned date/times.</returns>
-        [NotNull] public static ZonedDateTimePattern CreateWithCurrentCulture([NotNull] string patternText, [CanBeNull] IDateTimeZoneProvider zoneProvider) =>
+        [NotNull] public static ZonedDateTimePattern CreateWithCurrentCulture([NotNull] string patternText, [CanBeNull] IDateTimeZoneProvider? zoneProvider) =>
             Create(patternText, NodaFormatInfo.CurrentInfo, Resolvers.StrictResolver, zoneProvider, DefaultTemplateValue);
 
         /// <summary>

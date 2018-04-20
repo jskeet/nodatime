@@ -86,7 +86,7 @@ namespace NodaTime
             return value == other.value;
         }
 
-        public override bool Equals(object other) => other is YearMonthDay && Equals((YearMonthDay) other);
+        public override bool Equals(object? other) => other is YearMonthDay && Equals((YearMonthDay) other);
 
         public override int GetHashCode() => value;
 

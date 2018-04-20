@@ -155,7 +155,7 @@ namespace NodaTime.TimeZones
         /// <param name="obj">Another object to compare to.</param> 
         /// <filterpriority>2</filterpriority>
         /// <returns>True if the specified value is a <see cref="FixedDateTimeZone"/> with the same name, ID and offset; otherwise, false.</returns>
-        public override bool Equals(object obj) => Equals(obj as FixedDateTimeZone);
+        public override bool Equals(object? obj) => Equals(obj as FixedDateTimeZone);
 
         public bool Equals(FixedDateTimeZone? other) =>
             other != null &&

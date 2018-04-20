@@ -144,7 +144,7 @@ namespace NodaTime.TimeZones.Cldr
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => Equals(obj as MapZone);
+        public override bool Equals(object? obj) => Equals(obj as MapZone);
 
         /// <inheritdoc />
         public override string ToString()

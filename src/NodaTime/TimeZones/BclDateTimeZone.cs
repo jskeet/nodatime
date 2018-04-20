@@ -304,7 +304,11 @@ namespace NodaTime.TimeZones
         /// <see cref="TimeZoneInfo.Local"/>.</returns>
         [NotNull] public static BclDateTimeZone ForSystemDefault()
         {
-            TimeZoneInfo local = TimeZoneInfoInterceptor.Local;
+            TimeZoneInfo? local = TimeZoneInfoInterceptor.Local;
+            if (local == null)
+            {
+                throw new InvalidOperationException("System default time zone is null.");
+            }
             BclDateTimeZone currentSystemDefault = systemDefault;
 
             // Cached copy is out of date - wrap a new one

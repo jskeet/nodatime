@@ -196,7 +196,12 @@ namespace NodaTime.TimeZones
         [NotNull] public IEnumerable<string> GetIds() => CanonicalIdMap.Keys;
 
         /// <inheritdoc />
-        [CanBeNull] public string? GetSystemDefaultId() => MapTimeZoneInfoId(TimeZoneInfoInterceptor.Local);
+        [CanBeNull]
+        public string? GetSystemDefaultId()
+        {
+            var localZone = TimeZoneInfoInterceptor.Local;
+            return localZone == null ? null : MapTimeZoneInfoId(localZone);
+        }
 
         [VisibleForTesting]
         internal string? MapTimeZoneInfoId(TimeZoneInfo timeZone)

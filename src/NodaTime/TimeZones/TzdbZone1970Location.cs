@@ -188,7 +188,7 @@ namespace NodaTime.TimeZones
             /// </summary>
             /// <param name="obj">The object to compare this one with.</param>
             /// <returns><c>true</c> if the given object is a country with the same name and code as this one; <c>false</c> otherwise.</returns>
-            public override bool Equals(object obj) => Equals(obj as Country);
+            public override bool Equals(object? obj) => Equals(obj as Country);
 
             /// <summary>
             /// Returns a hash code for this country.
