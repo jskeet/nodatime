@@ -70,21 +70,14 @@ namespace NodaTime.Text
             return patternBuilder.Build(templateValue);
         }
 
-        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
-        {
-            switch (patternCharacter)
+        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo) =>
+            patternCharacter switch
             {
-                case 't':
-                    return formatInfo.DateTimeFormat.ShortTimePattern;
-                case 'T':
-                    return formatInfo.DateTimeFormat.LongTimePattern;
-                case 'r':
-                    return "HH:mm:ss.FFFFFFFFF";
-                default:
-                    // Will be turned into an exception.
-                    return null;
-            }
-        }
+                't' => formatInfo.DateTimeFormat.ShortTimePattern,
+                'T' => formatInfo.DateTimeFormat.LongTimePattern,
+                'r' => "HH:mm:ss.FFFFFFFFF",
+                _ => null // Will be turned into an exception.
+            };
 
         /// <summary>
         /// Bucket to put parsed values in, ready for later result calculation. This type is also used

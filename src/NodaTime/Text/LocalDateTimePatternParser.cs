@@ -102,23 +102,15 @@ namespace NodaTime.Text
             return patternBuilder.Build(templateValueDate.At(templateValueTime));
         }
 
-        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo)
-        {
-            switch (patternCharacter)
+        private string ExpandStandardFormatPattern(char patternCharacter, NodaFormatInfo formatInfo) =>
+            patternCharacter switch
             {
-                case 'f':
-                    return formatInfo.DateTimeFormat.LongDatePattern + " " + formatInfo.DateTimeFormat.ShortTimePattern;
-                case 'F':
-                    return formatInfo.DateTimeFormat.FullDateTimePattern;
-                case 'g':
-                    return formatInfo.DateTimeFormat.ShortDatePattern + " " + formatInfo.DateTimeFormat.ShortTimePattern;
-                case 'G':
-                    return formatInfo.DateTimeFormat.ShortDatePattern + " " + formatInfo.DateTimeFormat.LongTimePattern;
-                default:
-                    // Will be turned into an exception.
-                    return null;
-            }
-        }
+                'f' => formatInfo.DateTimeFormat.LongDatePattern + " " + formatInfo.DateTimeFormat.ShortTimePattern,
+                'F' => formatInfo.DateTimeFormat.FullDateTimePattern,
+                'g' => formatInfo.DateTimeFormat.ShortDatePattern + " " + formatInfo.DateTimeFormat.ShortTimePattern,
+                'G' => formatInfo.DateTimeFormat.ShortDatePattern + " " + formatInfo.DateTimeFormat.LongTimePattern,
+                _ => null // Will be turned into an exception.
+            };
         
         internal sealed class LocalDateTimeParseBucket : ParseBucket<LocalDateTime>
         {
