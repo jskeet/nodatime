@@ -476,7 +476,7 @@ namespace NodaTime.Globalization
                 }
                 else
                 {
-                    string eraNameFromCulture = GetEraNameFromBcl(era, cultureInfo);
+                    string? eraNameFromCulture = GetEraNameFromBcl(era, cultureInfo);
                     if (eraNameFromCulture != null && !pipeDelimited.StartsWith(eraNameFromCulture + "|"))
                     {
                         pipeDelimited = eraNameFromCulture + "|" + pipeDelimited;
@@ -494,7 +494,7 @@ namespace NodaTime.Globalization
             /// it's correct. (The selection here seems small, but it covers most cases.) This isn't ideal, but it's better
             /// than nothing, and fixes an issue where non-English BCL cultures have "gg" in their patterns.
             /// </summary>
-            private static string GetEraNameFromBcl(Era era, CultureInfo culture)
+            private static string? GetEraNameFromBcl(Era era, CultureInfo culture)
             {
                 var calendar = culture.DateTimeFormat.Calendar;
 #if NETSTANDARD1_3

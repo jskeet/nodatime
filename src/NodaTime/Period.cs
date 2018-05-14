@@ -964,7 +964,7 @@ namespace NodaTime
                 Preconditions.CheckNotNull(obj!, nameof(obj)).Normalize().GetHashCode();
         }
 
-        private sealed class PeriodComparer : Comparer<Period>
+        private sealed class PeriodComparer : Comparer<Period?>
         {
             private readonly LocalDateTime baseDateTime;
 
@@ -973,7 +973,7 @@ namespace NodaTime
                 this.baseDateTime = baseDateTime;
             }
 
-            public override int Compare(Period x, Period y)
+            public override int Compare(Period? x, Period? y)
             {
                 if (ReferenceEquals(x, y))
                 {

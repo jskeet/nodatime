@@ -148,7 +148,7 @@ namespace NodaTime.Text
 
             internal ParseResult<ZonedDateTime>? ParseZone(ValueCursor value)
             {
-                DateTimeZone zone = TryParseFixedZone(value) ?? TryParseProviderZone(value);
+                DateTimeZone? zone = TryParseFixedZone(value) ?? TryParseProviderZone(value);
 
                 if (zone == null)
                 {

@@ -589,13 +589,13 @@ namespace NodaTime.Text.Patterns
         {
             private readonly Action<TResult, StringBuilder> formatActions;
             // This will be null if the pattern is only capable of formatting.
-            private readonly ParseAction[] parseActions;
+            private readonly ParseAction[]? parseActions;
             private readonly Func<TBucket> bucketProvider;
             private readonly PatternFields usedFields;
             private readonly int expectedLength;
 
             public SteppedPattern(Action<TResult, StringBuilder> formatActions,
-                ParseAction[] parseActions,
+                ParseAction[]? parseActions,
                 Func<TBucket> bucketProvider,
                 PatternFields usedFields,
                 TResult sample)

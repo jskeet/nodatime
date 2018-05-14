@@ -153,7 +153,7 @@ namespace NodaTime.Test
             /// </summary>
             [XmlElement("period")]
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public PeriodBuilder PeriodBuilder
+            public PeriodBuilder? PeriodBuilder
             {
                 get { return Period == null ? null : Period.ToBuilder(); }
                 set { Period = value == null ? null : value.Build(); }

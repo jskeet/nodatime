@@ -81,7 +81,7 @@ namespace NodaTime.TimeZones
                 // Clamp the tail zone interval to start at the end of our final period, if necessary, so that the
                 // join is seamless.
                 ZoneInterval intervalFromTailZone = tailZone.GetZoneInterval(instant);
-                return intervalFromTailZone.RawStart < tailZoneStart ? firstTailZoneInterval : intervalFromTailZone;
+                return intervalFromTailZone.RawStart < tailZoneStart ? firstTailZoneInterval! : intervalFromTailZone;
             }
             
             int lower = 0; // Inclusive
