@@ -288,6 +288,7 @@ namespace NodaTime.Test.TimeZones
                 // Still remember what was requested.
                 base.ForId(id);
                 // Naughty! Breaking the contract.
+                // (But the compiler still gives a warning despite the dammit operator. Odd.)
                 return null!;
             }
 

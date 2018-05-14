@@ -35,6 +35,7 @@ namespace NodaTime.Utility
             Value = value;
         }
 
+#pragma warning disable CS8602 // Possible dereference of a null reference.
         /// <summary>
         /// Convenience method to hash two values.
         /// </summary>
@@ -83,5 +84,6 @@ namespace NodaTime.Utility
                 return new HashCodeHelper(Value * HashCodeMultiplier + (value?.GetHashCode() ?? 0));
             }
         }
+#pragma warning restore CS8602 // Possible dereference of a null reference.
     }
 }

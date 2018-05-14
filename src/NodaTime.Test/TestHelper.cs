@@ -270,7 +270,7 @@ namespace NodaTime.Test
         /// <param name="value">The base value.</param>
         /// <param name="equalValue">The value equal to but not the same object as the base value.</param>
         /// <param name="unequalValue">Values not equal to the base value.</param>
-        public static void TestEqualsClass<T>(T value, T equalValue, params T[] unequalValues) where T : class, IEquatable<T>
+        public static void TestEqualsClass<T>(T value, T equalValue, params T[] unequalValues) where T : class, IEquatable<T?>
         {
             TestObjectEquals(value, equalValue, unequalValues);
             Assert.False(value.Equals(null), "value.Equals<T>(null)");

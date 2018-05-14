@@ -176,7 +176,7 @@ namespace NodaTime.Test.Text
                 {
                     builder.AppendFormat("Description={0}; ", Description);
                 }
-                if (!Template.Equals(DefaultTemplate))
+                if (!Equals(Template, DefaultTemplate))
                 {
                     builder.AppendFormat("Template={0};", Template);
                 }

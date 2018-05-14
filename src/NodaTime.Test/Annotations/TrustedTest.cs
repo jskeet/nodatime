@@ -7,6 +7,9 @@ using System.Reflection;
 using NodaTime.Annotations;
 using NUnit.Framework;
 
+// I don't understand this warning...
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+
 namespace NodaTime.Test.Annotations
 {
     public class TrustedTest
