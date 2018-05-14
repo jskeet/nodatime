@@ -63,8 +63,5 @@
       <Name>NodaTime</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="NodaTime Release.snk" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
