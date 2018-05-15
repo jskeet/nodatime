@@ -196,7 +196,7 @@ namespace NodaTime.Test
         /// <param name="value">The base value.</param>
         /// <param name="equalValue">The value equal to but not the same object as the base value.</param>
         /// <param name="greaterValue">The values greater than the base value, in ascending order.</param>
-        public static void TestCompareToClass<T>(T value, T equalValue, params T[] greaterValues) where T : class, IComparable<T>
+        public static void TestCompareToClass<T>(T value, T equalValue, params T[] greaterValues) where T : class, IComparable<T?>
         {
             ValidateInput(value, equalValue, greaterValues, "greaterValue");
             Assert.Greater(value.CompareTo(null), 0, "value.CompareTo<T>(null)");
@@ -242,6 +242,10 @@ namespace NodaTime.Test
         /// <param name="greaterValue">The values greater than the base value, in ascending order.</param>
         public static void TestNonGenericCompareTo<T>(T value, T equalValue, params T[] greaterValues) where T : IComparable
         {
+            // Lots of warnings here - I really don't know what I should do with these.
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Possible dereference of a null reference.
             // Just type the values as plain IComparable for simplicity
             IComparable value2 = value;
             IComparable equalValue2 = equalValue;
@@ -260,6 +264,9 @@ namespace NodaTime.Test
                 value2 = greaterValue;
             }
             Assert.Throws<ArgumentException>(() => value2.CompareTo(new object()));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         /// <summary>
@@ -337,7 +344,10 @@ namespace NodaTime.Test
         /// <param name="greaterValue">The values greater than the base value, in ascending order.</param>
         public static void TestOperatorComparison<T>(T value, T equalValue, params T[] greaterValues)
         {
+#pragma warning disable CS8604 // Possible null reference argument.
+            // Not sure how best to fix this.
             ValidateInput(value, equalValue, greaterValues, "greaterValue");
+#pragma warning restore CS8604 // Possible null reference argument.
             Type type = typeof(T);
             var greaterThan = type.GetMethod("op_GreaterThan", new[] { type, type });
             var lessThan = type.GetMethod("op_LessThan", new[] { type, type });
@@ -454,7 +464,11 @@ namespace NodaTime.Test
         /// <param name="unequalValue">The value not equal to the base value.</param>
         public static void TestOperatorEquality<T>(T value, T equalValue, T unequalValue)
         {
+#pragma warning disable CS8604 // Possible null reference argument.
+            // I honestly don't know what to do about this. It's right, that we could pass null if T
+            // is Nullable<T>, as then a null value can box to null.
             ValidateInput(value, equalValue, unequalValue, "unequalValue");
+#pragma warning restore CS8604 // Possible null reference argument.
             Type type = typeof(T);
             var equality = type.GetMethod("op_Equality", new[] { type, type });
             if (equality != null)
@@ -533,7 +547,10 @@ namespace NodaTime.Test
             comparer = comparer ?? EqualityComparer<T>.Default;
 
             // Just include this here to simply cover everything that's doing XML serialization.
+#pragma warning disable CS8602 // Possible dereference of a null reference.
+            // Not sure of the best way to fix this.
             Assert.Null(value.GetSchema());
+#pragma warning restore CS8602 // Possible dereference of a null reference.
 
             XmlSerializer serializer = new XmlSerializer(typeof(SerializationHelper<T>));
             var helper = new SerializationHelper<T> { Value = value, Before = 100, After = 200 };
@@ -587,7 +604,10 @@ namespace NodaTime.Test
             var reader = root.CreateReader();
             reader.ReadToDescendant(element.Name.LocalName);
             var value = new T();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
+            // How can this be a null reference? Smells like a bug in the nullability preview.
             value.ReadXml(reader);
+#pragma warning restore CS8602 // Possible dereference of a null reference.
             Assert.AreEqual(XmlNodeType.Element, reader.NodeType);
             Assert.AreEqual("after", reader.Name);
         }
@@ -647,12 +667,16 @@ namespace NodaTime.Test
         }
     }
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+    // Basically, generics and nullability are a bit of a mess right now.
+
     /// <summary>
     /// Class used in XML serialization tests. This would be nested within TestHelper,
     /// but some environments don't like serializing nested types within static types.
     /// </summary>
     /// <typeparam name="T">Type of value to serialize</typeparam>
     public class SerializationHelper<T>
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
     {
         [XmlElement("before")]
         public int Before { get; set; }

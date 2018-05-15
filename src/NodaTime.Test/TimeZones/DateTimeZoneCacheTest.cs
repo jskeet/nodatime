@@ -289,7 +289,9 @@ namespace NodaTime.Test.TimeZones
                 base.ForId(id);
                 // Naughty! Breaking the contract.
                 // (But the compiler still gives a warning despite the dammit operator. Odd.)
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference or unconstrained type parameter.
                 return null!;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference or unconstrained type parameter.
             }
 
             public override string? GetSystemDefaultId() => null;

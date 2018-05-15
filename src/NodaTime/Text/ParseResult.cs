@@ -23,7 +23,11 @@ namespace NodaTime.Text
         private readonly Func<Exception>? exceptionProvider;
         internal bool ContinueAfterErrorWithMultipleFormats { get; }
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+        // This is a bit weird. Setting value = default; "fixes" the warning,
+        // but it doesn't really help if T is a non-nullable reference type.
         private ParseResult(Func<Exception> exceptionProvider, bool continueWithMultiple)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
         {
             this.exceptionProvider = exceptionProvider;
             this.ContinueAfterErrorWithMultipleFormats = continueWithMultiple;
