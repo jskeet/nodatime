@@ -6,7 +6,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
+using NodaTime.Extensions;
 using NodaTime.TimeZones;
+using NodaTime.Text;
 
 namespace NodaTime.Test.TimeZones
 {
@@ -310,6 +312,82 @@ namespace NodaTime.Test.TimeZones
             Assert.AreEqual(bclDaylight, interval.Savings != Offset.Zero,
                 "At {0}, BCL IsDaylightSavingTime={1}; Noda savings={2}",
                 instant, bclDaylight, interval.Savings);
+        }
+
+        // Remove when issue #1361 is fixed.
+        private static readonly LocalTimePattern InvariantRoundtripTime = LocalTimePattern.CreateWithInvariantCulture("HH:mm:ss.FFFFFFFFF");
+
+        private static readonly string[] AbbreviatedDaysOfWeek = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+
+        private static string FormatAdjustmentRule(TimeZoneInfo.AdjustmentRule rule)
+        {
+            var start = rule.DateStart.ToLocalDateTime();
+            var end = rule.DateStart.ToLocalDateTime();
+            // Note that we can't convert to an Offset, as there are values such as -23 hours.
+            var delta = rule.DaylightDelta.ToDuration();
+            var transitionStart = FormatTransitionTime(rule.DaylightTransitionStart);
+            var transitionEnd = FormatTransitionTime(rule.DaylightTransitionEnd);
+            // TODO: Check whether we see deltas of sub-minutes. If not, we can simplify this to +H:mm.
+            return $"{start:S}/{end:S}/{delta:j}/{transitionStart}/{transitionEnd}";
+
+            string FormatTransitionTime(TimeZoneInfo.TransitionTime transition)
+            {
+                var time = LocalDateTime.FromDateTime(transition.TimeOfDay).TimeOfDay;
+                var timeText = InvariantRoundtripTime.Format(time);
+                var month = transition.Month;
+                if (transition.IsFixedDateRule)
+                {
+                    int day = transition.Day;
+                    return $"{month:00}-{day:00}@{timeText}";
+                }
+                else
+                {
+                    int week = transition.Week;
+                    string dayOfWeek = AbbreviatedDaysOfWeek[(int) transition.DayOfWeek];
+                    return $"{month:00}-{week}-{dayOfWeek}@{timeText}";
+                }
+            }
+        }
+
+        private static TimeZoneInfo.AdjustmentRule ParseAdjustmentRule(string text)
+        {
+            string[] parts = text.Split('/');
+            if (parts.Length != 5)
+            {
+                throw new ArgumentException($"Invalid rule: '{text}'");
+            }
+            var dateStart = LocalDateTimePattern.ExtendedIso.Parse(parts[0]).Value;
+            var dateEnd = LocalDateTimePattern.ExtendedIso.Parse(parts[1]).Value;
+            var delta = DurationPattern.JsonRoundtrip.Parse(parts[2]).Value;
+            var transitionStart = ParseTransitionTime(parts[3]);
+            var transitionEnd = ParseTransitionTime(parts[4]);
+            return TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(
+                dateStart.ToDateTimeUnspecified(),
+                dateEnd.ToDateTimeUnspecified(),
+                delta.ToTimeSpan(),
+                transitionStart,
+                transitionEnd);
+
+            TimeZoneInfo.TransitionTime ParseTransitionTime(string tt)
+            {
+                string[] bits = tt.Split('@');
+                var time = InvariantRoundtripTime.Parse(bits[1]).Value;
+                var timeOfDay = (new LocalDate(2000, 1, 1) + time).ToDateTimeUnspecified();
+                string[] firstPartBits = bits[0].Split('-');
+                if (firstPartBits.Length == 2)
+                {
+                    int month = int.Parse(firstPartBits[0]);
+                    int day = int.Parse(firstPartBits[1]);
+                    return TimeZoneInfo.TransitionTime.CreateFixedDateRule(timeOfDay, month, day);
+                }
+                else
+                {
+                    int month = int.Parse(firstPartBits[0]);
+                    int week = int.Parse(firstPartBits[1]);
+                    DayOfWeek dayOfWeek = (DayOfWeek) Array.IndexOf(AbbreviatedDaysOfWeek, firstPartBits[2]);
+                    return TimeZoneInfo.TransitionTime.CreateFloatingDateRule(timeOfDay, month, week, dayOfWeek);
+                }
+            }
         }
     }
 }
