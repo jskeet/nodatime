@@ -108,6 +108,10 @@ namespace NodaTime.Globalization
 
         private void EnsureMonthsInitialized()
         {
+            if (longMonthNames != null)
+            {
+                return;
+            }
             lock (fieldLock)
             {
                 if (longMonthNames != null)
@@ -134,6 +138,10 @@ namespace NodaTime.Globalization
 
         private void EnsureDaysInitialized()
         {
+            if (longDayNames != null)
+            {
+                return;
+            }
             lock (fieldLock)
             {
                 if (longDayNames != null)
@@ -217,6 +225,10 @@ namespace NodaTime.Globalization
         private FixedFormatInfoPatternParser<T> EnsureFixedFormatInitialized<T>(ref FixedFormatInfoPatternParser<T>? field,
             Func<IPatternParser<T>> patternParserFactory)
         {
+            if (field != null)
+            {
+                return field;
+            }
             lock (fieldLock)
             {
                 if (field != null)
